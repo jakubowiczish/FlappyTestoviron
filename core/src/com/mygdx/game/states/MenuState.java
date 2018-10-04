@@ -1,6 +1,8 @@
 package com.mygdx.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,12 +16,16 @@ public class MenuState extends State {
     private Texture playBtn;
     private boolean showScore;
     GlyphLayout glyphLayout = new GlyphLayout();
+    private Music menuSong;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
         cam.setToOrtho(false, Flappy.WIDTH / 2, Flappy.HEIGHT / 2);
         background = new Texture("bg.png");
         playBtn = new Texture("playbtn.png");
+        menuSong = Gdx.audio.newMusic(Gdx.files.internal("maintesto.mp3"));
+        menuSong.play();
+
     }
 
     public MenuState(GameStateManager gsm, int score) {
@@ -76,5 +82,6 @@ public class MenuState extends State {
     public void dispose() {
         background.dispose();
         playBtn.dispose();
+        menuSong.dispose();
     }
 }

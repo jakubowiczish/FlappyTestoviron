@@ -95,7 +95,7 @@ public class PlayState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), 0);
-        sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
+        bird.draw(sb);
 
         for (Tube tube : tubes) {
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
