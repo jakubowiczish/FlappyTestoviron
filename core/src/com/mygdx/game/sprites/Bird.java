@@ -20,7 +20,7 @@ public class Bird {
     private Texture texture;
     private Texture bird;
 
-    private Sound[] flap = new Sound[3];
+    private Sound[] flap = new Sound[5];
     float birdWidth = 30f;
     float birdHeight;
 
@@ -32,7 +32,7 @@ public class Bird {
         birdRegion = new TextureRegion(bird);
         birdHeight = getTexture().getRegionHeight() / (float) getTexture().getRegionWidth() * birdWidth;
         bounds = new Rectangle(x, y, birdWidth/2f, birdHeight);
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 5; i++){
             flap[i] = Gdx.audio.newSound(Gdx.files.internal("testo"+ (i + 1) + ".ogg"));
         }
     }
