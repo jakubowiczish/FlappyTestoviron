@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Flappy;
+import com.mygdx.game.powerups.PowerupsManager;
 import com.mygdx.game.sprites.Bird;
 import com.mygdx.game.sprites.Tube;
 
@@ -16,13 +17,13 @@ public class PlayState extends State {
     private static final int TUBE_SPACING = 125;
     private static final int TUBE_COUNT = 4;
     private static final int GROUND_Y_OFFSET = -60;
+    private final PowerupsManager powerupsManager;
 
     private Bird bird;
     private Texture bg;
     private Texture ground;
     private Vector2 groundPos1, groundPos2;
 
-    private Tube tube;
 
     private Array<Tube> tubes;
     private int score;
@@ -37,12 +38,14 @@ public class PlayState extends State {
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, GROUND_Y_OFFSET);
         groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), GROUND_Y_OFFSET);
 
-        tube = new Tube(100);
+        powerupsManager = gsm.createPowerupsManager();
+        powerupsManager.clear();
 
         tubes = new Array<Tube>();
 
         for (int i = 1; i <= TUBE_COUNT; i++) {
             tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
+            powerupsManager.newTubeAppeared(tubes.get(tubes.size-1));
         }
     }
 
@@ -60,6 +63,7 @@ public class PlayState extends State {
 
         Vector3 prevPosition = bird.getPosition().cpy();
         bird.update(dt);
+        powerupsManager.update(cam, bird);
 
         for (Tube tube : tubes) {
             float tubePositionX = tube.getPosBotTube().x + tube.getBottomTube().getWidth() / 2f;
@@ -76,6 +80,8 @@ public class PlayState extends State {
 
             if (cam.position.x - (cam.viewportWidth / 2) > tube.getPosTopTube().x + tube.getTopTube().getWidth()) {
                 tube.reposition(tube.getPosTopTube().x + (Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT);
+                powerupsManager.newTubeAppeared(tube);
+
             }
 
             if (tube.collides(bird.getBounds())) {
@@ -104,6 +110,8 @@ public class PlayState extends State {
 
         sb.draw(ground, groundPos1.x, groundPos1.y);
         sb.draw(ground, groundPos2.x, groundPos2.y);
+
+        powerupsManager.draw(cam, sb);
 
         sb.end();
 

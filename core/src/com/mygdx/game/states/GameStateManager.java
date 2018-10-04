@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
+import com.mygdx.game.powerups.PowerupsManager;
 
 import java.util.Stack;
 
@@ -13,8 +14,10 @@ public class GameStateManager {
     private final Preferences prefs;
     private Stack<State> states;
     private Matrix4 projectionMatrix;
+    private PowerupsManager powerupsManager;
 
     public GameStateManager(){
+        powerupsManager = new PowerupsManager();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         font.getData().setScale(Gdx.graphics.getWidth() / 1080f * 2f); // size of score
         prefs = Gdx.app.getPreferences("testo");
@@ -58,5 +61,9 @@ public class GameStateManager {
 
     public Preferences getPrefs() {
         return prefs;
+    }
+
+    public PowerupsManager createPowerupsManager() {
+        return powerupsManager;
     }
 }
