@@ -23,7 +23,7 @@ public class Flappy extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		gsm.setDefaultProjectionMatrix(batch.getProjectionMatrix().cpy());
-		music = Gdx.audio.newMusic(Gdx.files.internal("SecretLand.mp3"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("backgroundMusic/SecretLand.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.7f);
 		music.play();
