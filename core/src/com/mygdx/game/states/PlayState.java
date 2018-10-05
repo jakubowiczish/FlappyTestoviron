@@ -17,6 +17,7 @@ public class PlayState extends State {
     private static final int TUBE_SPACING = 125;
     private static final int TUBE_COUNT = 4;
     private static final int GROUND_Y_OFFSET = -60;
+    private static final int FIRST_TUBE_SPACING = 100;
     private final PowerupsManager powerupsManager;
 
     private Bird bird;
@@ -44,7 +45,7 @@ public class PlayState extends State {
         tubes = new Array<Tube>();
 
         for (int i = 1; i <= TUBE_COUNT; i++) {
-            tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
+            tubes.add(new Tube(FIRST_TUBE_SPACING + i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
             powerupsManager.newTubeAppeared(tubes.get(tubes.size-1));
         }
     }
