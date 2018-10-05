@@ -15,13 +15,20 @@ public class PowerupsManager {
     private final ArrayList<PowerupBuilder> builders = new ArrayList<PowerupBuilder>();
     private final ArrayList<Powerup> currentPowerups;
 
+
     final private int MAX_NEXT_POWERUP_COUNTER = 5;
     int nextPowerupCounter = MathUtils.random(MAX_NEXT_POWERUP_COUNTER);
 
+    private Sound[] calvinSound = new Sound[3];
+
     public PowerupsManager() {
+
         final Sound rolexSound = Gdx.audio.newSound(Gdx.files.internal("powerups/rolex.ogg"));
         final Sound orangeSound1 = Gdx.audio.newSound(Gdx.files.internal("powerups/orange1.ogg"));
-        final Sound calvinSound = Gdx.audio.newSound(Gdx.files.internal("powerups/calvin.ogg"));
+
+        for(int i = 0; i < 3; i++){
+            calvinSound[i] = Gdx.audio.newSound(Gdx.files.internal("powerups/calvin" + (i + 1) + ".ogg"));
+        }
 
         builders.add(new PowerupBuilder()
                 .addTexture(new Texture(Gdx.files.internal("powerups/rolex.png")), 13f)
@@ -47,7 +54,7 @@ public class PowerupsManager {
 
                     @Override
                     public void acquired() {
-                        calvinSound.play(1f);
+                        calvinSound[MathUtils.random(0, calvinSound.length - 1)].play(1f);
                     }
                 }));
         currentPowerups = new ArrayList<Powerup>();
