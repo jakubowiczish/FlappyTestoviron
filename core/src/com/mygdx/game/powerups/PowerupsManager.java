@@ -21,6 +21,7 @@ public class PowerupsManager {
     public PowerupsManager() {
         final Sound rolexSound = Gdx.audio.newSound(Gdx.files.internal("powerups/rolex.ogg"));
         final Sound orangeSound1 = Gdx.audio.newSound(Gdx.files.internal("powerups/orange1.ogg"));
+        final Sound calvinSound = Gdx.audio.newSound(Gdx.files.internal("powerups/calvin.ogg"));
 
         builders.add(new PowerupBuilder()
                 .addTexture(new Texture(Gdx.files.internal("powerups/rolex.png")), 13f)
@@ -38,6 +39,15 @@ public class PowerupsManager {
                     @Override
                     public void acquired() {
                         orangeSound1.play(0.8f);
+                    }
+                }));
+        builders.add(new PowerupBuilder()
+                .addTexture(new Texture(Gdx.files.internal("powerups/calvin.png")), 13f)
+                .addAcquireEvent(new PowerupEvent(){
+
+                    @Override
+                    public void acquired() {
+                        calvinSound.play(0.9f);
                     }
                 }));
         currentPowerups = new ArrayList<Powerup>();
