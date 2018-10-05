@@ -72,7 +72,7 @@ public class PowerupsManager {
 
     public void addNewPowerup(float minX, float maxX, float minY, float maxY) {
         PowerupBuilder builder = builders.get(MathUtils.random(0, builders.size()-1));
-        float x = MathUtils.random(minX, maxX);
+        float x = MathUtils.random(minX, maxX - builder.getWidth());
         float y = MathUtils.random(minY, maxY - builder.getHeight());
 
         currentPowerups.add(builder.create(x, y));
@@ -90,10 +90,8 @@ public class PowerupsManager {
         nextPowerupCounter--;
         if(nextPowerupCounter < 0) {
             nextPowerupCounter = MathUtils.random(MAX_NEXT_POWERUP_COUNTER);
-            float X_PADDING = 5f;
-
-            addNewPowerup(tube.getPosBotTube().x - X_PADDING,
-                    tube.getPosBotTube().x + X_PADDING,
+            addNewPowerup(tube.getPosBotTube().x,
+                    tube.getPosBotTube().x + tube.getTopTube().getWidth(),
                     tube.getPosBotTube().y + tube.getBottomTube().getHeight(),
                     tube.getPosTopTube().y);
         }
