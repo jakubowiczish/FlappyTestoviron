@@ -27,13 +27,13 @@ public class Bird {
     public Bird(int x, int y) {
         position = new Vector3(x, y, 0); // not using z
         velocity = new Vector3(0, 0, 0); // not moving yet
-        texture = new Texture("birdanimation.png");
-        bird = new Texture("testo.png");
+        // texture = new Texture("bird/birdanimation.png");
+        bird = new Texture("bird/testo.png");
         birdRegion = new TextureRegion(bird);
         birdHeight = getTexture().getRegionHeight() / (float) getTexture().getRegionWidth() * birdWidth;
         bounds = new Rectangle(x, y, birdWidth/2f, birdHeight);
         for(int i = 0; i < 3; i++){
-            flap[i] = Gdx.audio.newSound(Gdx.files.internal("testoOnClick/testo" + (i + 1) + ".ogg")); // testo4 and testo 5 should not be used in this part of game
+            flap[i] = Gdx.audio.newSound(Gdx.files.internal("bird/testo" + (i + 1) + ".ogg")); // testo4 and testo 5 should not be used in this part of game
         }
     }
 
@@ -62,7 +62,7 @@ public class Bird {
 
     public void jump() {
         velocity.y = 250;
-        flap[MathUtils.random(0, flap.length - 1)].play(0.5f);
+        flap[MathUtils.random(0, flap.length - 1)].play(0.6f);
     }
 
     public Rectangle getBounds() {
@@ -70,7 +70,7 @@ public class Bird {
     }
 
     public void dispose() {
-        texture.dispose();
+        // texture.dispose();
         for (Sound sound : flap) {
             sound.dispose();
         }

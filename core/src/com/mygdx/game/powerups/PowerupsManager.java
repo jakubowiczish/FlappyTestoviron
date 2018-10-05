@@ -47,7 +47,7 @@ public class PowerupsManager {
 
                     @Override
                     public void acquired() {
-                        calvinSound.play(0.9f);
+                        calvinSound.play(1f);
                     }
                 }));
         currentPowerups = new ArrayList<Powerup>();
