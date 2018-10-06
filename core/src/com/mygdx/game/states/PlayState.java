@@ -35,6 +35,7 @@ public class PlayState extends State {
         bird = new Bird(50, 200);
         cam.setToOrtho(false, Flappy.WIDTH / 2, Flappy.HEIGHT / 2);
         bg = new Texture("bg.png");
+        bg.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         ground = new Texture("ground.png");
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, GROUND_Y_OFFSET);
         groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), GROUND_Y_OFFSET);
@@ -46,7 +47,7 @@ public class PlayState extends State {
 
         for (int i = 1; i <= TUBE_COUNT; i++) {
             tubes.add(new Tube(FIRST_TUBE_SPACING + i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
-            powerupsManager.newTubeAppeared(tubes.get(tubes.size-1));
+            powerupsManager.newTubeAppeared(tubes.get(tubes.size - 1));
         }
     }
 
@@ -91,7 +92,7 @@ public class PlayState extends State {
         }
 
         if (bird.getPosition().y <= ground.getHeight() + GROUND_Y_OFFSET)
-            gsm.set(new MenuState(gsm , score));
+            gsm.set(new MenuState(gsm, score));
 
         cam.update();
     }
@@ -101,7 +102,7 @@ public class PlayState extends State {
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), 0);
+        sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), 0, 0, 0, bg.getWidth(), bg.getHeight(), 1f, 1f, 0f, (int) (cam.position.x * 0.15f), 0, bg.getWidth(), bg.getHeight(), false, false);
         bird.draw(sb);
 
         for (Tube tube : tubes) {
@@ -119,8 +120,8 @@ public class PlayState extends State {
         sb.setProjectionMatrix(gsm.getProjectionMatrix());
         sb.begin();
         sb.flush();
-        float padding = Gdx.graphics.getWidth()*0.01f;
-        gsm.getFont().draw(sb, "Score: " + score, padding,Gdx.graphics.getHeight() - gsm.getFont().getAscent() - padding);
+        float padding = Gdx.graphics.getWidth() * 0.01f;
+        gsm.getFont().draw(sb, "Score: " + score, padding, Gdx.graphics.getHeight() - gsm.getFont().getAscent() - padding);
         sb.flush();
         sb.end();
     }
