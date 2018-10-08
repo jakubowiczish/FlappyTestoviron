@@ -1,6 +1,7 @@
 package com.mygdx.game.powerups;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.game.sprites.Bird;
 import com.mygdx.game.sprites.Tube;
+import com.mygdx.game.states.PlayState;
 
 import java.util.ArrayList;
 
@@ -17,15 +19,20 @@ public class PowerupsManager {
 
 
     final private int MAX_NEXT_POWERUP_COUNTER = 5;
+    private final Texture nightCallBackground;
+    private final Music nightcallMusic;
     int nextPowerupCounter = MathUtils.random(MAX_NEXT_POWERUP_COUNTER);
 
     private Sound[] calvinSound = new Sound[3];
+    private PlayState playstate;
 
     public PowerupsManager() {
 
         final Sound rolexSound = Gdx.audio.newSound(Gdx.files.internal("powerups/rolex.ogg"));
         final Sound orangeSound1 = Gdx.audio.newSound(Gdx.files.internal("powerups/orange1.ogg"));
-
+        nightcallMusic = Gdx.audio.newMusic(Gdx.files.internal("powerups/nightcall.ogg"));
+        nightCallBackground = new Texture("powerups/nightcall.png");
+        nightCallBackground.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         for(int i = 0; i < 3; i++){
             calvinSound[i] = Gdx.audio.newSound(Gdx.files.internal("powerups/calvin" + (i + 1) + ".ogg"));
         }
@@ -36,6 +43,7 @@ public class PowerupsManager {
 
                     @Override
                     public void acquired() {
+                        playstate.addScore(1);
                         rolexSound.play(0.8f);
                     }
                 }));
@@ -45,6 +53,7 @@ public class PowerupsManager {
 
                     @Override
                     public void acquired() {
+                        playstate.addScore(1);
                         orangeSound1.play(0.8f);
                     }
                 }));
@@ -54,9 +63,35 @@ public class PowerupsManager {
 
                     @Override
                     public void acquired() {
+                        playstate.addScore(1);
                         calvinSound[MathUtils.random(0, calvinSound.length - 1)].play(1f);
                     }
                 }));
+        builders.add(new PowerupBuilder()
+                .addTexture(new Texture(Gdx.files.internal("powerups/calvin.png")), 25f)
+                .addAcquireEvent(new PowerupEvent(){
+
+                    @Override
+                    public void acquired() {
+                        playstate.pauseDefaultMusic(true);
+                        playstate.setBackground(nightCallBackground);
+                        playstate.setGameSpeed(100f);
+                        playstate.addScore(1);
+                        nightcallMusic.play();
+                        nightcallMusic.setOnCompletionListener(new Music.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(Music music) {
+                                playstate.pauseDefaultMusic(false);
+                                playstate.setGameSpeed(0f);
+                                playstate.setBackground(null);
+
+                            }
+                        });
+                    }
+                }));
+
+
+
         currentPowerups = new ArrayList<Powerup>();
     }
 
@@ -100,5 +135,15 @@ public class PowerupsManager {
 
     public void clear() {
         currentPowerups.clear();
+    }
+
+    public void setPlayState(PlayState playstate) {
+        this.playstate = playstate;
+    }
+
+    public void onDie() {
+        nightcallMusic.stop();
+        playstate.setBackground(null);
+
     }
 }

@@ -19,6 +19,7 @@ public class PlayState extends State {
     private static final int GROUND_Y_OFFSET = -60;
     private static final int FIRST_TUBE_SPACING = 100;
     private final PowerupsManager powerupsManager;
+    private final Texture defaultBg;
 
     private Bird bird;
     private Texture bg;
@@ -34,13 +35,14 @@ public class PlayState extends State {
         super(gsm);
         bird = new Bird(50, 200);
         cam.setToOrtho(false, Flappy.WIDTH / 2, Flappy.HEIGHT / 2);
-        bg = new Texture("bg.png");
+        bg = new Texture("oneAndTheOnly.jpg");
         bg.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        defaultBg = bg;
         ground = new Texture("ground.png");
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, GROUND_Y_OFFSET);
         groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), GROUND_Y_OFFSET);
 
-        powerupsManager = gsm.createPowerupsManager();
+        powerupsManager = gsm.createPowerupsManager(this);
         powerupsManager.clear();
 
         tubes = new Array<Tube>();
@@ -87,14 +89,22 @@ public class PlayState extends State {
             }
 
             if (tube.collides(bird.getBounds())) {
+                onDie();
                 gsm.set(new MenuState(gsm, score));
             }
         }
 
-        if (bird.getPosition().y <= ground.getHeight() + GROUND_Y_OFFSET)
+        if (bird.getPosition().y <= ground.getHeight() + GROUND_Y_OFFSET) {
+            onDie();
             gsm.set(new MenuState(gsm, score));
+        }
 
         cam.update();
+    }
+
+    private void onDie() {
+        powerupsManager.onDie();
+        pauseDefaultMusic(false);
     }
 
     @Override
@@ -102,7 +112,9 @@ public class PlayState extends State {
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), 0, 0, 0, bg.getWidth(), bg.getHeight(), 1f, 1f, 0f, (int) (cam.position.x * 0.15f), 0, bg.getWidth(), bg.getHeight(), false, false);
+        float height = cam.viewportHeight;
+        float width = bg.getWidth() / (float) bg.getHeight() * height;
+        sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), 0, 0, 0, cam.viewportWidth, height, 1f, 1f, 0f, (int) (cam.position.x * 0.15f), 0, (int) (bg.getWidth() * (cam.viewportWidth / width)), bg.getHeight(), false, false);
         bird.draw(sb);
 
         for (Tube tube : tubes) {
@@ -141,5 +153,27 @@ public class PlayState extends State {
             groundPos1.add(ground.getWidth() * 2, 0);
         if (cam.position.x - (cam.viewportWidth / 2) > groundPos2.x + ground.getWidth())
             groundPos2.add(ground.getWidth() * 2, 0);
+    }
+
+    public void pauseDefaultMusic(boolean pause) {
+        if (pause) gsm.getMusic().pause();
+        else gsm.getMusic().play();
+
+    }
+
+    public void setBackground(Texture background) {
+        if (background == null) {
+            this.bg = defaultBg;
+            return;
+        }
+        this.bg = background;
+    }
+
+    public void setGameSpeed(float gameSpeed) {
+        this.bird.setMovement(gameSpeed);
+    }
+
+    public void addScore(int i) {
+        score += i;
     }
 }

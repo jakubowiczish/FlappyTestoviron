@@ -2,6 +2,7 @@ package com.mygdx.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
@@ -12,6 +13,7 @@ import java.util.Stack;
 public class GameStateManager {
     private final BitmapFont font;
     private final Preferences prefs;
+    private final Music music;
     private Stack<State> states;
     private Matrix4 projectionMatrix;
     private PowerupsManager powerupsManager;
@@ -23,6 +25,11 @@ public class GameStateManager {
         prefs = Gdx.app.getPreferences("testo");
 
         states = new Stack<State>();
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("backgroundMusic/SecretLand.ogg"));
+        music.setLooping(true);
+        music.setVolume(0.7f);
+        music.play();
     }
 
     public void push(State state){
@@ -63,7 +70,12 @@ public class GameStateManager {
         return prefs;
     }
 
-    public PowerupsManager createPowerupsManager() {
+    public PowerupsManager createPowerupsManager(PlayState playState) {
+        powerupsManager.setPlayState(playState);
         return powerupsManager;
+    }
+
+    public Music getMusic() {
+        return music;
     }
 }
