@@ -14,10 +14,10 @@ import com.mygdx.game.sprites.Bird;
 import com.mygdx.game.sprites.Tube;
 
 public class PlayState extends State {
-    private static final int TUBE_SPACING = 125;
+    private static final int TUBE_SPACING = 200;
     private static final int TUBE_COUNT = 4;
     private static final int GROUND_Y_OFFSET = -60;
-    private static final int FIRST_TUBE_SPACING = 100;
+    private static final int FIRST_TUBE_SPACING = 200;
     private final PowerupsManager powerupsManager;
     private final Texture defaultBg;
 
