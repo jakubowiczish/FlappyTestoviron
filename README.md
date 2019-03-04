@@ -8,7 +8,7 @@ App is not currently available on Google Play Store, you can download android ve
 
 https://1drv.ms/u/s!AhhUCOE2-Bg2-XZGABASDxgIXqKi
 
-Desktop version (to run it, you need to have java installed):
+Desktop version (you need to have java installed in order to run it):
 
 https://1drv.ms/u/s!AhhUCOE2-Bg2-XcQZYNXpVmXVu5P
 
